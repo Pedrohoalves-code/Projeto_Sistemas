@@ -84,6 +84,33 @@ namespace FashionLib
         public void Atualizar()
         {
             var cmd = Banco.Abrir();
+            cmd.CommandType= CommandType.StoredProcedure;
+            cmd.CommandText = "sp_cliente_update";
+            cmd.Parameters.AddWithValue("spnome",Nome);
+            cmd.Parameters.AddWithValue("spcpf",Cpf);
+            cmd.Parameters.AddWithValue("spdata_nascimento",Data_Nasc);
+            cmd.Parameters.AddWithValue("spativo", Ativo);
+            cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+        }
+        // Função para deixar o funcionário inativo
+        public void DeixarInativo(int id)
+        {
+            var cmd = Banco.Abrir();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = $"update clientes set ativo = 0 where id = {id}";
+            cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+        }
+
+        // Função para ativar o funcionário novamente
+        public void DeixarAtivo(int id)
+        {
+            var cmd = Banco.Abrir();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = $"update clientes set ativo = 1 where id = {id}";
+            cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
         }
     }
 }
